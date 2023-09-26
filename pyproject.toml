@@ -1,0 +1,178 @@
+[tool.poetry]
+name = "drf-s3-direct"
+version = "0.1.0"
+description = "Extension for django and drf to ease work with S3"
+authors = [
+  "Saritasa <pypi@saritasa.com>",
+]
+maintainers = [
+    "Stanislav Khlud <stanislav.khlud@saritasa.com>",
+]
+homepage = "https://pypi.org/project/drf-s3-direct/"
+repository = "https://github.com/saritasa-nest/drf-s3-direct/"
+keywords = [
+  "python",
+  "django",
+  "drf",
+  "s3"
+]
+license = "MIT"
+readme = "README.md"
+packages = [
+    {include = "drf_s3_direct"}
+]
+
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "License :: OSI Approved :: MIT License",
+  "Natural Language :: English",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Environment :: Web Environment",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Internet :: WWW/HTTP",
+  "Framework :: Django",
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+django = "^4"
+# Django REST framework is a powerful and flexible toolkit for building Web APIs.
+# https://www.django-rest-framework.org/
+djangorestframework = "^3"
+# Boto3 is the Amazon Web Services (AWS) Software Development Kit (SDK) for Python
+# https://boto3.amazonaws.com/v1/documentation/api/latest/index.html
+boto3 = "^1"
+# Python humanize functions
+# https://python-humanize.readthedocs.io/en/latest/
+humanize = "^4"
+
+# Sane and flexible OpenAPI 3 schema generation for Django REST framework.
+# https://drf-spectacular.readthedocs.io/en/latest/
+drf-spectacular = { version = "^0.26", optional = true }
+
+[tool.poetry.extras]
+openapi = ["drf-spectacular"]
+all = ["drf-spectacular"]
+
+[tool.poetry.group.dev.dependencies]
+# Collection of invoke commands used by Saritasa
+# Invoke is a Python (2.7 and 3.4+) task execution tool & library,
+# drawing inspiration from various sources to arrive at a powerful & clean feature set.
+# http://www.pyinvoke.org/
+# https://github.com/saritasa-nest/saritasa-python-invocations/
+saritasa_invocations = "^0.8.2"
+# Improved REPL
+ipdb = "^0.13.13"
+ipython = "^8.14.0"
+# A framework for managing and maintaining multi-language pre-commit hooks.
+# https://pre-commit.com/
+pre-commit = "^3.3.3"
+
+[tool.poetry.group.linters.dependencies]
+# Flake dependencies are added so that VSCode extension for flake8
+# would work properly
+# https://marketplace.visualstudio.com/items?itemName=ms-python.flake8&ssr=false#overview
+flake8 = "^6.1.0"
+# A plugin for Flake8 finding likely bugs and design problems in your program.
+# https://github.com/PyCQA/flake8-bugbear
+flake8-bugbear = "^23.9.16"
+# Extension to enforce better comma placement.
+# https://github.com/PyCQA/flake8-commas
+flake8-commas = "^2.1.0"
+# A flake8 plugin that warn about backslashes usage.
+# https://github.com/wemake-services/flake8-broken-line
+flake8-broken-line = "^1.0.0"
+# A simple module that adds an extension for the fantastic pydocstyle tool to flake8.
+# https://github.com/PyCQA/flake8-docstrings
+flake8-docstrings = "^1.7.0"
+# A flake8 plugin loading the configuration from pyproject.toml
+# https://github.com/john-hen/Flake8-pyproject
+flake8-pyproject = "^1.2.3"
+# flake8 plugin to validate type annotations accoring to modern practices.
+# https://github.com/plinss/flake8-modern-annotations
+flake8-modern-annotations = "^1.5.0"
+# McCabe complexity checker.
+# https://github.com/PyCQA/mccabe
+mccabe = "^0.7.0"
+
+# Mypy is a static type checker for Python.
+# https://mypy.readthedocs.io/en/stable/
+mypy = "^1.5.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"
+line_length = 79
+multi_line_output = 3
+skip = [
+    "_tmp",
+    "src",
+    ".venv",
+]
+sections = [
+    "FUTURE",
+    "STDLIB",
+    "THIRDPARTY",
+    "FIRSTPARTY",
+    "LOCALFOLDER",
+]
+include_trailing_comma = true
+default_section = "THIRDPARTY"
+
+[tool.flake8]
+ignore = [
+    # https://www.flake8rules.com/rules/E203.html
+    "E203",
+    # https://www.flake8rules.com/rules/E126.html
+    "E126",
+    # https://www.flake8rules.com/rules/W503.html
+    "W503",
+    # https://www.flake8rules.com/rules/W504.html
+    "W504",
+    # https://github.com/m-burst/flake8-pytest-style/blob/master/docs/rules/PT004.md
+    "PT004",
+    # https://www.pydocstyle.org/en/latest/error_codes.html
+    # Missing docstring in public module
+    "D100",
+    # Missing docstring in public nested class
+    "D106",
+    # Missing docstring in __init__
+    "D107",
+    # Use r””” if any backslashes in a docstring
+    "D301",
+]
+statistics = true
+count = true
+max-complexity = 10
+pytest-fixture-no-parentheses = true
+pytest-parametrize-names-type = "list"
+pytest-parametrize-values-type = "list"
+pytest-parametrize-values-row-type = "list"
+inline-quotes = "double"
+docstring-quotes = "double"
+docstring-convention = "pep257"
+exclude = [
+    ".venv",
+    "__init__.py",
+    "docs",
+]
+
+[tool.black]
+line-length = 79
+target-version = [
+  "py311",
+  "py310",
+]
+
+[tool.mypy]
+# https://mypy.readthedocs.io/en/stable/running_mypy.html#missing-imports
+ignore_missing_imports = true
+strict = false
+warn_no_return = false
+check_untyped_defs = true
+disallow_any_generics = true
+exclude = "venv|/.venv"

@@ -1,0 +1,31 @@
+{
+    "files.exclude": {
+      "**/__pycache__": true,
+      "**/.mypy_cache": true
+    },
+
+    "editor.rulers": [79],
+
+    "editor.bracketPairColorization.enabled": true,
+
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.diagnosticSeverityOverrides": {
+      "reportPrivateImportUsage": "none"
+    },
+
+    "python.analysis.inlayHints.functionReturnTypes": true,
+
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "mypy.enabled": true,
+    "mypy.dmypyExecutable": "${workspaceFolder}/.venv/bin/dmypy",
+
+    "[python]": {
+      "editor.formatOnSave": true,
+      "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+      },
+      "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "isort.args": ["--settings-path", "${workspaceFolder}/pyproject.toml"],
+}
