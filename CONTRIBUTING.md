@@ -10,7 +10,11 @@ To install them you would need to run `install` command:
 poetry install
 ```
 
-To activate your `virtualenv` run `poetry shell`.
+To activate your `virtualenv` run command.
+
+```bash
+poetry shell
+```
 
 ## Style checks
 

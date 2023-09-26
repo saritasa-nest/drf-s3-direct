@@ -2,6 +2,6 @@
 
 We follow [Semantic Versions](https://semver.org/).
 
-## unreleased
+## Unreleased
 
 - Beta release
