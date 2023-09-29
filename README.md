@@ -75,20 +75,23 @@ You can add it to your app like this:
 path("s3/", include("django_drf_s3.api.urls")),
 ```
 
-Also you would need to set up `S3_FILE_PERMISSION_MAPPING` or
-`DEFAULT_S3_FILE_PERMISSION` in settings.
+Also you would need to set up `DRF_S3_DIRECT_FILE_PERMISSION_MAPPING` or
+`DRF_S3_DIRECT_DEFAULT_FILE_PERMISSION` in settings.
 
-* `DEFAULT_S3_FILE_PERMISSION` - a path to drf's permission class
-* `S3_FILE_PERMISSION_MAPPING` - mapping of `app.model` as key and path to
+* `DRF_S3_DIRECT_DEFAULT_FILE_PERMISSION` - a path to drf's permission class
+* `DRF_S3_DIRECT_FILE_PERMISSION_MAPPING` - mapping of `app.model.field` as key and path to
   drf's permission class
 
 For example:
 
 ```python
-DEFAULT_S3_FILE_PERMISSION = "rest_framework.permissions.AllowAny"
-S3_FILE_PERMISSION_MAPPING = {
-    "app.model1": "apps.app.api.permissions.InstancePermission",
-    "app.model2": "apps.app.api.permissions.InstancePermissionWithHasFieldPermissionMixin",
+DRF_S3_DIRECT_DEFAULT_FILE_PERMISSION = (
+    "tests.example_app.api.permissions.CheckPermissionToFile"
+)
+DRF_S3_DIRECT_FILE_PERMISSION_MAPPING = {
+    "example_app.modelwithfiles.image": (
+        "tests.example_app.api.permissions.CheckPermissionToSpecialFile"
+    ),
 }
 ```
 
@@ -101,11 +104,7 @@ supplied configuration.
 
 Copies file to download folder in bucket and returns to link of new object.
 This folder can be configured in s3 to expire files in 24 hours.
-
-##### check-file-access/{app}/{model}/{id}/{field}/
-
-Endpoint allows to check if user has access to file or not.
-Returns `200` or `404`(`403` if you raise Permission error in your permission class).
+To specify folder use `DRF_S3_DIRECT_DOWNLOADS_FOLDER` setting.
 
 #### S3FileField
 

@@ -65,13 +65,28 @@ all = ["drf-spectacular", "django-imagekit"]
 # drawing inspiration from various sources to arrive at a powerful & clean feature set.
 # http://www.pyinvoke.org/
 # https://github.com/saritasa-nest/saritasa-python-invocations/
-saritasa_invocations = "^0.8.2"
+saritasa_invocations = "^0.8.3"
 # Improved REPL
 ipdb = "^0.13.13"
 ipython = "^8.14.0"
 # A framework for managing and maintaining multi-language pre-commit hooks.
 # https://pre-commit.com/
 pre-commit = "^3.3.3"
+# Psycopg 3 is a modern implementation of a PostgreSQL adapter for Python.
+# https://psycopg.org/
+# Needed for sync support
+psycopg = {extras = ["binary"], version = "^3.1.10" }
+# Storage to AWS S3
+# https://django-storages.readthedocs.io/en/latest/
+django-storages = {extras = ["boto3"], version = "^1.13.2"}
+# Provide management command to check if primary database is ready to accept
+# connections
+# https://github.com/painless-software/django-probes
+django-probes = "^1.7.0"
+# Different useful Django utils
+# https://django-extensions.readthedocs.io/en/latest/
+django-extensions = "^3.2.3"
+requests = "^2.31.0"
 
 [tool.poetry.group.linters.dependencies]
 # Flake dependencies are added so that VSCode extension for flake8
@@ -103,6 +118,27 @@ mccabe = "^0.7.0"
 # Mypy is a static type checker for Python.
 # https://mypy.readthedocs.io/en/stable/
 mypy = "^1.5.1"
+
+[tool.poetry.group.mypy-stubs.dependencies]
+# Typing stubs for requests
+types-requests = "^2.31.0.6"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.4.1"
+# Provides useful tools for testing Django apps
+# Docs https://pytest-django.readthedocs.io/en/latest/
+pytest-django = "^4.5.2"
+# To run test in parallel
+# Docs: https://pypi.org/project/pytest-xdist/
+pytest-xdist = "^3.3.1"
+# To prettify pytest output
+pytest-sugar = "^0.9.7"
+# Support use a fixture as one of the values passed in @pytest.mark.parametrize
+# https://pypi.org/project/pytest-lazy-fixture/
+pytest-lazy-fixture = "^0.6.3"
+# Fast creating of model instances. May be used in tests
+# https://factoryboy.readthedocs.io/en/stable/
+factory-boy = "^3.3.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -163,6 +199,7 @@ exclude = [
     ".venv",
     "__init__.py",
     "docs",
+    "tests/example_app/migrations/*",
 ]
 
 [tool.black]
@@ -180,3 +217,24 @@ warn_no_return = false
 check_untyped_defs = true
 disallow_any_generics = true
 exclude = "venv|/.venv"
+
+[tool.pytest.ini_options]
+# --reuse-db:
+#   allow saving DB tables between test sessions (like --keepdb)
+# --capture=no
+#   allow use of ipdb during tests
+# --ff
+#   run last failed tests first
+addopts = [
+    "--reuse-db",
+    "--capture=no",
+    "--ff",
+]
+# skip all files inside following dirs
+norecursedirs = [
+    "_tmp",
+    "node_modules",
+    "src",
+]
+# set Django settings
+DJANGO_SETTINGS_MODULE = "tests.settings"

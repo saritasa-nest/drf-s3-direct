@@ -1,0 +1,50 @@
+version: '3.7'
+name: "drf-s3-direct"
+
+volumes:
+  ipython_history: {}
+
+services:
+  # ###########################################################################
+  # Database
+  # ###########################################################################
+  postgres:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h postgres -t 5 -U ${COMPOSE_PROJECT_NAME}-user || false"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+    environment:
+      - POSTGRES_DB=${COMPOSE_PROJECT_NAME}-dev
+      - POSTGRES_USER=${COMPOSE_PROJECT_NAME}-user
+      - POSTGRES_PASSWORD=postgres
+
+  # ###########################################################################
+  # MinIO Storage
+  # minio:9001 - Server
+  # minio:9000 - UI
+  # ###########################################################################
+  minio:
+    image: minio/minio
+    command: server --address 0.0.0.0:9001 --console-address 0.0.0.0:9000 /data
+    environment:
+      - MINIO_ROOT_USER=root
+      - MINIO_ROOT_PASSWORD=rootroot
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+
+  createbucket:
+    image: minio/mc
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set myminio http://minio:9001 root rootroot;
+      /usr/bin/mc mb myminio/${COMPOSE_PROJECT_NAME}-files;
+      /usr/bin/mc anonymous set public myminio/${COMPOSE_PROJECT_NAME}-files;
+      exit 0;
+      "

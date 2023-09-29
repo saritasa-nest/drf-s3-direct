@@ -98,7 +98,7 @@ def get_minio_url() -> str:
 
 def get_s3_client() -> typing.Any:
     """Prepare s3 client for usage."""
-    region = getattr(settings, "AWS_S3_DIRECT_REGION", None)
+    region = getattr(settings, "AWS_S3_DIRECT_REGION", "")
     endpoint_url = get_aws_endpoint(region=region)
     credentials = get_aws_credentials()
     return boto3.client(
@@ -195,7 +195,12 @@ def get_download_link(original_url: str) -> str:
         "Key": original_url,
     }
     filename = original_url.split("/")[-1]
-    key = keys.S3KeyWithPrefix("downloads")(filename=filename)
+    downloads_folder = getattr(
+        settings,
+        "DRF_S3_DIRECT_DOWNLOADS_FOLDER",
+        "downloads",
+    )
+    key = keys.S3KeyWithPrefix(downloads_folder)(filename=filename)
     s3_client = get_s3_client()
     # https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/head_object.html
     original_object_meta = s3_client.head_object(
