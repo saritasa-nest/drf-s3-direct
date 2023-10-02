@@ -54,13 +54,17 @@ class S3RequestParamsSerializer(serializers.Serializer):
             min_bound, max_bound = config.content_length_range
             if min_bound > content_length:
                 errors["content_length"] = (
-                    f"Invalid file size - `{content_length}` of `{filename}`. "
+                    "Invalid file size "
+                    f"- {humanize.naturalsize(content_length)} "
+                    f"of {filename}. "
                     f"Need between {humanize.naturalsize(min_bound)} "
                     f"and {humanize.naturalsize(max_bound)}."
                 )
             if max_bound < content_length:
                 errors["content_length"] = (
-                    f"Invalid file size - `{content_length}` of `{filename}`. "
+                    "Invalid file size "
+                    f"- {humanize.naturalsize(content_length)} "
+                    f"of {filename}. "
                     f"Need between {humanize.naturalsize(min_bound)} "
                     f"and {humanize.naturalsize(max_bound)}."
                 )

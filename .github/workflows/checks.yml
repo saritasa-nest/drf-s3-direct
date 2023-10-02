@@ -45,6 +45,9 @@ jobs:
     - name: Install local dependencies
       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       run: poetry install --no-interaction --all-extras
+    - name: Prepare env
+      run: |
+        poetry run inv prepare-ci-env
     - name: Run checks
       run: |
         poetry run pre-commit run --hook-stage push --all-files
